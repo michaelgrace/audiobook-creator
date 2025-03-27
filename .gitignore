@@ -21,7 +21,7 @@ ehthumbs.db
 # User-specific files
 .idea/
 .vscode/
-.ps1
+.ps1/
 
 # Environment variables
 .env
