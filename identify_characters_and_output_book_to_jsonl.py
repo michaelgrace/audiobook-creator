@@ -40,6 +40,12 @@ def download_with_progress(model_name):
     cache_dir = os.path.join(os.getcwd(), "model_cache")
     os.makedirs(cache_dir, exist_ok=True)
     
+    # Check if model already exists in cache
+    model_dir = os.path.join(cache_dir, model_name.replace("/", "--"))
+    if os.path.exists(model_dir) and len(os.listdir(model_dir)) > 0:
+        print(f"Model {model_name} already exists in cache. Using cached version.")
+        return GLiNER.from_pretrained(model_name, cache_dir=cache_dir)
+    
     # Log progress manually since tqdm might not work in Docker
     print("Download in progress - this may take several minutes...")
     

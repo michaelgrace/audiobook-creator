@@ -17,17 +17,23 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 import traceback
+import openai  # Add this import
 
 def check_if_kokoro_api_is_up(client):
     try:
+        # Try with the specified model first
         with client.audio.speech.with_streaming_response.create(
             model="kokoro",
             voice="af_heart",
-            response_format="aac",  # Ensuring format consistency
+            response_format="aac",
             speed=0.85,
-            input="Hello, how are you ?"
+            input="Hello, how are you?"
         ) as response:
             return True, None
+    except openai.NotFoundError:
+        # If the model is not found, log the specific error
+        traceback.print_exc()
+        return False, "The Kokoro model was not found. This model may not exist or your account may not have access to it."
     except Exception as e:
         traceback.print_exc()
-        return False, "The Kokoro API is not working. Please check if the .env file is correctly set up and the Kokoro API is up. Error: " + str(e)
+        return False, "The Kokoro API is not working. Please check if the .env file is correctly set up and the API is up. Error: " + str(e)

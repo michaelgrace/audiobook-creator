@@ -1,20 +1,36 @@
 version: '3.8'
 
+networks:
+  app-network:
+    driver: bridge
+    name: app-network  # Force the network name to avoid gpu_ prefix
+  crown-network:
+    external: true
+
 services:
   audiobook_creator:
     build:
-      context: ../..
+      context: ../.. 
       dockerfile: docker/gpu/Dockerfile
     container_name: audiobook_creator
     volumes:
       - ../..:/app
       - ../../model_cache:/app/model_cache
+      - ../../huggingface_cache:/root/.cache/huggingface
     depends_on:
       - kokoro_fastapi
     env_file:
       - ../../.env
     restart: always
-    network_mode: host
+    networks:
+      app-network:
+        aliases:
+          - audiobook_creator
+      crown-network:
+        aliases:
+          - audiobook_creator
+    ports:
+      - "7860:7860"
     deploy:
       resources:
         reservations:
@@ -27,11 +43,36 @@ services:
     image: ghcr.io/remsky/kokoro-fastapi-gpu:v0.2.2
     container_name: kokoro_service
     restart: always
-    network_mode: host
+    networks:
+      app-network:
+        aliases:
+          - kokoro_service
+    ports:
+      - "8880:8880"  # Adding explicit port mapping
     deploy:
       resources:
         reservations:
           devices:
             - driver: nvidia
               count: all
+              capabilities: [gpu]
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    volumes:
+      - ./ollama-data:/root/.ollama
+      - ./entrypoint.sh:/entrypoint.sh
+    ports:
+      - "11434:11434"
+    entrypoint: ["/bin/bash", "/entrypoint.sh"]
+    networks:
+      - app-network
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
               capabilities: [gpu]

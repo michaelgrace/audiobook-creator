@@ -1,10 +1,52 @@
+# Python cache
 __pycache__/
+*.py[cod]
+*$py.class
 books/
 generated_audiobooks/
-model_cache/
 audio_samples/
 temp_audio/
 todo.md
 .venv/
 .DS_Store
+
+# Logs
+*.log
+logs/
+
+# System files that might appear
+Thumbs.db
+ehthumbs.db
+
+# User-specific files
+.idea/
+.vscode/
+.ps1
+
+# Environment variables
 .env
+
+# Model caches
+model_cache/
+huggingface_cache/
+ollama-data/
+
+# Generated content
+converted_book.txt
+extracted_book.txt
+*.aac
+*.mp3
+*.m4b
+*.m4a
+chapter_list.txt
+chapters.txt
+speaker_attributed_book.jsonl
+tool-commands.dockerfile
+
+# Docker volumes
+docker/**/data/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/

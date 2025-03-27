@@ -1,0 +1,22 @@
+{
+    "legend": {
+        "1": "completely masculine",
+        "2": "mostly masculine",
+        "3": "moderately masculine",
+        "4": "slightly masculine",
+        "5": "neutral/unknown",
+        "6": "slightly feminine",
+        "7": "moderately feminine",
+        "8": "mostly feminine",
+        "9": "almost completely feminine",
+        "10": "completely feminine"
+    },
+    "scores": {
+        "narrator": {
+            "name": "narrator",
+            "age": "adult",
+            "gender": "female",
+            "gender_score": 0
+        }
+    }
+}
